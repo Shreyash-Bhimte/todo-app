@@ -115,6 +115,24 @@ function addTodo() {
 }
 
 // ================================
+// TOGGLE COMPLETE
+// ================================
+function toggleComplete(id) {
+  const todo = todos.find(function (t) { return t.id === id; });
+  if (!todo) return;
+  todo.completed = !todo.completed;
+  renderTodos();
+}
+
+// ================================
+// DELETE TODO
+// ================================
+function deleteTodo(id) {
+  todos = todos.filter(function (t) { return t.id !== id; });
+  renderTodos();
+}
+
+// ================================
 // EVENT LISTENERS
 // ================================
 
@@ -126,7 +144,26 @@ todoInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") addTodo();
 });
 
+// Event delegation — one listener on the list
+// handles clicks on ALL checkboxes and delete buttons
+todoList.addEventListener("click", function (e) {
+    console.log("clicked:", e.target, "classes:", e.target.className);
+  const item = e.target.closest(".todo-item");
+  if (!item) return;
+
+  const id = item.dataset.id;
+
+  if (e.target.classList.contains("todo-checkbox")) {
+    toggleComplete(id);
+  }
+
+  if (e.target.classList.contains("delete-btn")) {
+    deleteTodo(id);
+  }
+});
+
 // ================================
 // INITIALISE
 // ================================
 renderTodos();
+
