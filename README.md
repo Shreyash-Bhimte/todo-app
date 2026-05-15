@@ -37,13 +37,14 @@ A clean, minimal todo list app built with pure HTML, CSS, and vanilla JavaScript
 - Deployed on GitHub Pages
 
 ## Project Structure
-'''
+
+```
 todo-app/
 ├── index.html
 ├── style.css
 ├── app.js
 └── README.md
-'''
+```
 
 ## Author
 
