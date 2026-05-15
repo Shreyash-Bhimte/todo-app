@@ -77,15 +77,26 @@ function escapeHTML(str) {
 }
 
 // ================================
+// LOCALSTORAGE
+// ================================
+function saveToStorage() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+function loadFromStorage() {
+  const stored = localStorage.getItem("todos");
+  if (stored) {
+    todos = JSON.parse(stored);
+  }
+}
+
+// ================================
 // ADD TODO
 // ================================
 function addTodo() {
   const text = todoInput.value.trim();
-
-  // Edge case: empty input
   if (text === "") return;
 
-  // Edge case: duplicate prevention
   const isDuplicate = todos.some(function (todo) {
     return todo.text.toLowerCase() === text.toLowerCase();
   });
@@ -97,41 +108,31 @@ function addTodo() {
     return;
   }
 
-  // Create new todo object
   const newTodo = {
     id: generateId(),
     text: text,
     completed: false,
   };
 
-  // Update state
   todos.push(newTodo);
-
-  // Clear input
   todoInput.value = "";
-
-  // Re-render
+  saveToStorage(); // ADD THIS
   renderTodos();
 }
 
-// ================================
-// TOGGLE COMPLETE
-// ================================
 function toggleComplete(id) {
   const todo = todos.find(function (t) { return t.id === id; });
   if (!todo) return;
   todo.completed = !todo.completed;
+  saveToStorage(); // ADD THIS
   renderTodos();
 }
 
-// ================================
-// DELETE TODO
-// ================================
 function deleteTodo(id) {
   todos = todos.filter(function (t) { return t.id !== id; });
+  saveToStorage(); // ADD THIS
   renderTodos();
 }
-
 // ================================
 // EVENT LISTENERS
 // ================================
@@ -165,5 +166,6 @@ todoList.addEventListener("click", function (e) {
 // ================================
 // INITIALISE
 // ================================
+loadFromStorage();
 renderTodos();
 
