@@ -163,6 +163,23 @@ todoList.addEventListener("click", function (e) {
   }
 });
 
+// Filter tabs
+document.querySelectorAll(".filter-btn").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    // Update state
+    currentFilter = btn.dataset.filter;
+
+    // Update active class on tabs
+    document.querySelectorAll(".filter-btn").forEach(function (b) {
+      b.classList.remove("active");
+    });
+    btn.classList.add("active");
+
+    // Re-render with new filter
+    renderTodos();
+  });
+});
+
 // ================================
 // INITIALISE
 // ================================
