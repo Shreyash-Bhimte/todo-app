@@ -335,3 +335,20 @@ header h1 {
     opacity: 1;
   }
 }
+
+/* =====================
+   Polish
+   ===================== */
+#todo-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#remaining-count {
+  transition: all 0.2s ease;
+}
+
+::selection {
+  background-color: var(--accent);
+  color: #fff;
+}
