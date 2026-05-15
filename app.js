@@ -12,7 +12,7 @@ const addBtn = document.getElementById("add-btn");
 const todoList = document.getElementById("todo-list");
 const emptyState = document.getElementById("empty-state");
 const remainingCount = document.getElementById("remaining-count");
-
+const clearCompletedBtn = document.getElementById("clear-completed-btn");
 // ================================
 // GENERATE UNIQUE ID
 // ================================
@@ -35,12 +35,22 @@ function renderTodos() {
   // Step 2: wipe the current list
   todoList.innerHTML = "";
 
-  // Step 3: show empty state or build list items
+// Step 3: show empty state or build list items
   if (filtered.length === 0) {
     emptyState.style.display = "block";
+
+    if (currentFilter === "active") {
+      emptyState.textContent = "No active tasks. Well done!";
+    } else if (currentFilter === "completed") {
+      emptyState.textContent = "No completed tasks yet.";
+    } else {
+      emptyState.textContent = "No tasks yet. Add one above!";
+    }
+
   } else {
     emptyState.style.display = "none";
 
+    // THIS PART WAS MISSING — builds the actual list items
     filtered.forEach(function (todo) {
       const li = document.createElement("li");
       li.className = "todo-item" + (todo.completed ? " completed" : "");
@@ -60,11 +70,14 @@ function renderTodos() {
     });
   }
 
-  // Step 4: update remaining count
+  // Step 4: update remaining count + clear completed visibility
   const activeCount = todos.filter(function (t) { return !t.completed; }).length;
   remainingCount.textContent = activeCount === 1
     ? "1 task left"
     : activeCount + " tasks left";
+
+  const completedCount = todos.filter(function (t) { return t.completed; }).length;
+  clearCompletedBtn.style.visibility = completedCount > 0 ? "visible" : "hidden";
 }
 
 // ================================
@@ -133,13 +146,23 @@ function deleteTodo(id) {
   saveToStorage(); // ADD THIS
   renderTodos();
 }
+
+// ================================
+// CLEAR COMPLETED
+// ================================
+function clearCompleted() {
+  todos = todos.filter(function (t) { return !t.completed; });
+  saveToStorage();
+  renderTodos();
+}
 // ================================
 // EVENT LISTENERS
 // ================================
 
 // Add button click
 addBtn.addEventListener("click", addTodo);
-
+// Clear completed
+clearCompletedBtn.addEventListener("click", clearCompleted);
 // Enter key in input
 todoInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") addTodo();
